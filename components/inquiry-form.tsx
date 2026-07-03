@@ -18,31 +18,43 @@ export function InquiryForm() {
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setStatus("submitting");
-    setMessage("");
 
-    const response = await fetch("/api/inquiries", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        ...form,
-        guests: Number(form.guests),
-      }),
-    });
-
-    const data = (await response.json()) as { error?: string };
-
-    if (!response.ok) {
+    if (form.arrivalDate && form.departureDate && form.departureDate <= form.arrivalDate) {
       setStatus("error");
-      setMessage(data.error || "Something went wrong. Please try again.");
+      setMessage("Departure must be after arrival.");
       return;
     }
 
-    setStatus("success");
-    setMessage("Thanks. Your enquiry has been sent and saved.");
-    setForm(initialState);
+    setStatus("submitting");
+    setMessage("");
+
+    try {
+      const response = await fetch("/api/inquiries", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...form,
+          guests: Number(form.guests),
+        }),
+      });
+
+      const data = (await response.json()) as { error?: string };
+
+      if (!response.ok) {
+        setStatus("error");
+        setMessage(data.error || "Something went wrong. Please try again.");
+        return;
+      }
+
+      setStatus("success");
+      setMessage("Thanks. Your enquiry has been sent and saved.");
+      setForm(initialState);
+    } catch {
+      setStatus("error");
+      setMessage("We could not send your enquiry right now. Please try again.");
+    }
   }
 
   return (
@@ -91,6 +103,7 @@ export function InquiryForm() {
             onChange={(event) => setForm({ ...form, departureDate: event.target.value })}
             name="departureDate"
             type="date"
+            min={form.arrivalDate || undefined}
           />
         </label>
       </div>
