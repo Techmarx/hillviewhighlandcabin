@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { InquiryForm } from "@/components/inquiry-form";
 
 const highlights = ["Sleeps 4 guests", "2 bedrooms and 2 beds", "1 bathroom", "On-site parking"];
@@ -30,6 +31,34 @@ const journalNotes = [
   "Easy walking access into Braemar village",
   "A strong base for hiking and scenic drives",
   "Comfort-focused stay with kitchen and parking",
+];
+
+const galleryImages = [
+  {
+    src: "/hillview/cc2e5476-0f6d-45b3-a9da-1685b794afa3.avif",
+    alt: "Hillview exterior in Braemar",
+    className: "gallery-image-large",
+  },
+  {
+    src: "/hillview/08c7c53c-496f-4185-86cc-6dbcd0c308c1.avif",
+    alt: "Hillview living room",
+    className: "gallery-image-small",
+  },
+  {
+    src: "/hillview/12180bce-34b1-4202-a3ea-dc050954d9a9.avif",
+    alt: "Hillview kitchen",
+    className: "gallery-image-small",
+  },
+  {
+    src: "/hillview/f83ef939-b756-4bc8-844f-305c2c06ac6c.avif",
+    alt: "Hillview bathroom",
+    className: "gallery-image-small",
+  },
+  {
+    src: "/hillview/0ad9a7d4-bd95-4499-b392-21c141aab8ed.avif",
+    alt: "Hillview balcony",
+    className: "gallery-image-small",
+  },
 ];
 
 export default function HomePage() {
@@ -77,8 +106,16 @@ export default function HomePage() {
             </a>
           </div>
         </div>
-        <div className="hero-visual" aria-hidden="true">
+        <div className="hero-visual">
           <div className="hero-photo">
+            <Image
+              src="/hillview/cc2e5476-0f6d-45b3-a9da-1685b794afa3.avif"
+              alt="Hillview cabin exterior"
+              fill
+              priority
+              className="hero-photo-image"
+              sizes="(max-width: 900px) 100vw, 45vw"
+            />
             <div className="hero-photo-badge">
               <span>Hillview</span>
               <small>2 bed cabin with on-site parking and great views</small>
@@ -111,7 +148,15 @@ export default function HomePage() {
       </section>
 
       <section className="story-band">
-        <div className="story-visual" aria-hidden="true" />
+        <div className="story-visual">
+          <Image
+            src="/hillview/e14edafe-2561-437a-a0e5-e12e31b775d0.avif"
+            alt="Hillview living room seating area"
+            fill
+            className="story-visual-image"
+            sizes="(max-width: 900px) 100vw, 40vw"
+          />
+        </div>
         <div className="story-copy">
           <p className="eyebrow">Why guests return</p>
           <h2>Location and walkability come up again and again, alongside comfort, views, and easy access to hiking.</h2>
@@ -120,6 +165,31 @@ export default function HomePage() {
               <li key={item}>{item}</li>
             ))}
           </ul>
+        </div>
+      </section>
+
+      <section className="photo-gallery" aria-labelledby="gallery-title">
+        <div className="gallery-heading">
+          <p className="eyebrow">Photo journal</p>
+          <h2 id="gallery-title">A closer look at the rooms, textures, and views that shape the stay.</h2>
+        </div>
+        <div className="gallery-grid">
+          {galleryImages.map((image, index) => (
+            <figure key={image.src} className={image.className}>
+              <Image
+                src={image.src}
+                alt={image.alt}
+                fill
+                priority={index === 0}
+                className="gallery-image"
+                sizes={
+                  image.className === "gallery-image-large"
+                    ? "(max-width: 900px) 100vw, 52vw"
+                    : "(max-width: 900px) 50vw, 22vw"
+                }
+              />
+            </figure>
+          ))}
         </div>
       </section>
 
