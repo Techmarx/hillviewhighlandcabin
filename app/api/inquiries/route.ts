@@ -78,6 +78,14 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error("Unexpected inquiry route failure", error);
+
+    if (error instanceof Error && error.message.includes("Supabase environment variables are missing")) {
+      return NextResponse.json(
+        { error: "The website is missing its Supabase server configuration. Please update the Vercel environment variables and redeploy." },
+        { status: 500 },
+      );
+    }
+
     return NextResponse.json(
       { error: "We could not save your enquiry right now." },
       { status: 500 },
